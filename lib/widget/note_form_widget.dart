@@ -362,6 +362,7 @@ class NoteFormWidget extends StatelessWidget {
         ),
       );
 
+  //TODO:  Fertilizer Price should also be input from the user through textFormField of type double, but it gets used again on note_form_widget_mortality.  so it needs to update.
   Widget buildFertPrice() => Padding(
         padding: EdgeInsets.all(2),
         child: Container(

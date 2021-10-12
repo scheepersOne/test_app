@@ -115,6 +115,7 @@ class NoteFormWidgetSell extends StatelessWidget {
         ),
         Expanded(
           flex: 6,
+          //TODO:  Should be textFormField of type double.
           child: Slider(
             value: (oldApplesSold ?? 0).toDouble(),
             min: 0,
@@ -127,6 +128,7 @@ class NoteFormWidgetSell extends StatelessWidget {
       ],
     ),
   );
+
 
   Widget buildPriceSold() => Padding(
     padding: EdgeInsets.all(2),
@@ -157,6 +159,7 @@ class NoteFormWidgetSell extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 10,
+                  //TODO:  Should be textFormField of type double.
                   child: NumberPicker(
                     textStyle: TextStyle(color: Colors.white),
                     axis: Axis.horizontal,
@@ -205,6 +208,7 @@ class NoteFormWidgetSell extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 10,
+                  //TODO:  Should be textFormField of type double.
                   child: NumberPicker(
                     textStyle: TextStyle(color: Colors.white),
                     axis: Axis.horizontal,

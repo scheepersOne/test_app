@@ -61,6 +61,8 @@ class _NoteDetailPageTasksState extends State<NoteDetailPageTasks> {
                 child: ListView(
                   padding: EdgeInsets.symmetric(vertical: 8),
                   children: [
+                    //TODO:  The tasks widgets(day 1 - day 42) Should be in a separate listView and be stored in a list,
+                    //TODO: The list should only return widgets that is today's date, and the days after( The days that have passed, should not be displayed...)
                     Text(
                       'Tasks :',
                       style: TextStyle(

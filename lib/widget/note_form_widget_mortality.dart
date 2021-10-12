@@ -188,6 +188,7 @@ class NoteFormWidgetMortality extends StatelessWidget {
             ),
             Expanded(
               flex: 6,
+              //TODO:  This variable should be subtracted from the total remaining apples, currently it does not.  
               child: TextFormField(
                 maxLines: 1,
                 initialValue: oldSpoiled,
@@ -269,6 +270,7 @@ class NoteFormWidgetMortality extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 10,
+                  //TODO:  This needs to be a TextFormField, and the variable used should count ++ with fertPrice on note_form_widget.
                   child: NumberPicker(
                     textStyle: TextStyle(color: Colors.white),
                     axis: Axis.horizontal,
