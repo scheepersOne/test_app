@@ -63,6 +63,7 @@ class _NoteDetailPageTasksState extends State<NoteDetailPageTasks> {
                   children: [
                     //TODO:  The tasks widgets(day 1 - day 42) Should be in a separate listView and be stored in a list,
                     //TODO: The list should only return widgets that is today's date, and the days after( The days that have passed, should not be displayed...)
+                    //TODO:  If possible, I would like to add a or create a new data field that receives the temperature of each house separately each day... further explanations in call.
                     Text(
                       'Tasks :',
                       style: TextStyle(
