@@ -6,7 +6,7 @@ import 'package:numberpicker/numberpicker.dart';
 class NoteFormWidget extends StatelessWidget {
   final int? length;
   final int? width;
-  final int? temp;
+  final double? temp;
   final String? apples;
   final String? spoiled;
   final String? oldSpoiled;
@@ -21,10 +21,12 @@ class NoteFormWidget extends StatelessWidget {
   final int? cashReceived;
   final int? oldCashReceived;
   final String? title;
+  final bool? autoDate;
+  final bool? customDate;
 
   final ValueChanged<int> onChangedLength;
   final ValueChanged<int> onChangedWidth;
-  final ValueChanged<int> onChangedTemp;
+  final ValueChanged<double> onChangedTemp;
   final ValueChanged<String> onChangedApples;
   final ValueChanged<String> onChangedSpoiled;
   final ValueChanged<String> oldOnChangedSpoiled;
@@ -39,44 +41,51 @@ class NoteFormWidget extends StatelessWidget {
   final ValueChanged<int> onChangedCashReceived;
   final ValueChanged<int> oldOnChangedCashReceived;
   final ValueChanged<String> onChangedTitle;
+  final ValueChanged<bool> onChangedAutoDate;
+  final ValueChanged<bool> onChangedCustomDate;
 
-  const NoteFormWidget({
-    Key? key,
-    this.length = 0,
-    this.width = 0,
-    this.temp = 0,
-    this.apples = '',
-    this.spoiled = '',
-    this.oldSpoiled = '',
-    this.applesPrice = '',
-    this.fert = 0,
-    this.oldFert = 0,
-    this.fertPrice = 0,
-    this.oldFertPrice = 0,
-    this.applesSold = 0,
-    this.oldApplesSold = 0,
-    this.priceSold = 0,
-    this.cashReceived = 0,
-    this.oldCashReceived = 0,
-    this.title = '',
-    required this.onChangedLength,
-    required this.onChangedWidth,
-    required this.onChangedTemp,
-    required this.onChangedApples,
-    required this.onChangedSpoiled,
-    required this.onChangedApplesPrice,
-    required this.oldOnChangedSpoiled,
-    required this.onChangedFert,
-    required this.oldOnChangedFert,
-    required this.onChangedFertPrice,
-    required this.oldOnChangedFertPrice,
-    required this.onChangedApplesSold,
-    required this.oldOnChangedApplesSold,
-    required this.onChangedPriceSold,
-    required this.onChangedCashReceived,
-    required this.oldOnChangedCashReceived,
-    required this.onChangedTitle,
-  }) : super(key: key);
+  const NoteFormWidget(
+      {Key? key,
+      this.length = 0,
+      this.width = 0,
+      this.temp = 0,
+      this.apples = '',
+      this.spoiled = '',
+      this.oldSpoiled = '',
+      this.applesPrice = '',
+      this.fert = 0,
+      this.oldFert = 0,
+      this.fertPrice = 0,
+      this.oldFertPrice = 0,
+      this.applesSold = 0,
+      this.oldApplesSold = 0,
+      this.priceSold = 0,
+      this.cashReceived = 0,
+      this.oldCashReceived = 0,
+      this.title = '',
+      this.autoDate = true,
+      this.customDate = false,
+      required this.onChangedLength,
+      required this.onChangedWidth,
+      required this.onChangedTemp,
+      required this.onChangedApples,
+      required this.onChangedSpoiled,
+      required this.onChangedApplesPrice,
+      required this.oldOnChangedSpoiled,
+      required this.onChangedFert,
+      required this.oldOnChangedFert,
+      required this.onChangedFertPrice,
+      required this.oldOnChangedFertPrice,
+      required this.onChangedApplesSold,
+      required this.oldOnChangedApplesSold,
+      required this.onChangedPriceSold,
+      required this.onChangedCashReceived,
+      required this.oldOnChangedCashReceived,
+      required this.onChangedTitle,
+      required this.onChangedAutoDate,
+      required this.onChangedCustomDate,
+ })
+      : super(key: key);
 
   int? get userLength => length;
 
@@ -99,10 +108,49 @@ class NoteFormWidget extends StatelessWidget {
               buildFert(),
               buildFertPrice(),
               buildTemp(),
+              buildDate(context)
             ],
           ),
         ),
       );
+
+// Build dateTime
+
+  Widget buildDate(context) {
+    return buildHeader(
+        header: 'Date',
+        child: Container(
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              unselectedWidgetColor: Colors.white,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: CheckboxListTile(
+                      value: autoDate,
+                      title: Text(
+                        'Auto Date',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (value) => onChangedAutoDate(value!)),
+                ),
+                Expanded(
+                  child: CheckboxListTile(
+                      title: Text(
+                        'Custom date',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value: customDate,
+                      onChanged: (value) => onChangedCustomDate(value!)),
+                ),
+              ],
+            ),
+          ),
+        ));
+  }
 
   //Build Header.
   Widget buildHeader({
@@ -137,8 +185,6 @@ class NoteFormWidget extends StatelessWidget {
           ),
         ),
       );
-
-
 
   //Build Title.
   Widget buildTitle() => TextFormField(
@@ -338,11 +384,11 @@ class NoteFormWidget extends StatelessWidget {
               flex: 9,
               child: Slider(
                 label: temp.toString(),
-                value: (temp ?? 0).toDouble(),
-                min: 0,
-                max: 40,
+                value: (temp ?? 0),
+                min: 0.0,
+                max: 40.0,
                 divisions: 40,
-                onChanged: (temp) => onChangedTemp(temp.toInt()),
+                onChanged: (temp) => onChangedTemp(temp),
               ),
             ),
           ],
@@ -423,5 +469,4 @@ class NoteFormWidget extends StatelessWidget {
           ),
         ),
       );
-
 }

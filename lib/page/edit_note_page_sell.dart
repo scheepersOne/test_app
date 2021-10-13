@@ -15,7 +15,6 @@ class AddEditNotePageSell extends StatefulWidget {
 }
 
 class _AddEditNotePageSellState extends State<AddEditNotePageSell> {
-
   final _formKey = GlobalKey<FormState>();
   late int editApplesSold;
   late int editOldApplesSold;
@@ -28,9 +27,9 @@ class _AddEditNotePageSellState extends State<AddEditNotePageSell> {
     super.initState();
     editApplesSold = widget.note?.applesSold ?? 0;
     editOldApplesSold = widget.note?.oldApplesSold ?? 0;
-    editPriceSold= widget.note?.priceSold ?? 0;
-    editCashReceived= widget.note?.cashReceived ?? 0;
-    editOldCashReceived= widget.note?.oldCashReceived ?? 0;
+    editPriceSold = widget.note?.priceSold ?? 0;
+    editCashReceived = widget.note?.cashReceived ?? 0;
+    editOldCashReceived = widget.note?.oldCashReceived ?? 0;
   }
 
   @override
@@ -41,14 +40,17 @@ class _AddEditNotePageSellState extends State<AddEditNotePageSell> {
         body: Form(
           key: _formKey,
           child: NoteFormWidgetSell(
-            applesSold:editApplesSold,
-            oldApplesSold:editOldApplesSold,
-            priceSold:editPriceSold,
-            cashReceived:editCashReceived,
-            oldCashReceived:editOldCashReceived,
-            oldOnChangedApplesSold: (oldApplesSold) => setState(() => this.editOldApplesSold = oldApplesSold),
-            onChangedPriceSold: (priceSold) => setState(() => this.editPriceSold = priceSold),
-            oldOnChangedCashReceived: (oldCashReceived) => setState(() => this.editOldCashReceived = oldCashReceived),
+            applesSold: editApplesSold,
+            oldApplesSold: editOldApplesSold,
+            priceSold: editPriceSold,
+            cashReceived: editCashReceived,
+            oldCashReceived: editOldCashReceived,
+            oldOnChangedApplesSold: (oldApplesSold) =>
+                setState(() => this.editOldApplesSold = oldApplesSold),
+            onChangedPriceSold: (priceSold) =>
+                setState(() => this.editPriceSold = priceSold),
+            oldOnChangedCashReceived: (oldCashReceived) =>
+                setState(() => this.editOldCashReceived = oldCashReceived),
           ),
         ),
       );
@@ -57,8 +59,7 @@ class _AddEditNotePageSellState extends State<AddEditNotePageSell> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-        ),
+        style: ElevatedButton.styleFrom(),
         onPressed: addOrUpdateNote,
         child: Text('Save'),
       ),
@@ -72,6 +73,7 @@ class _AddEditNotePageSellState extends State<AddEditNotePageSell> {
 
       if (isUpdating) {
         await updateNote();
+        Navigator.of(context).pop();
       }
       Navigator.of(context).pop();
     }
@@ -79,9 +81,9 @@ class _AddEditNotePageSellState extends State<AddEditNotePageSell> {
 
   Future updateNote() async {
     final note = widget.note!.copy(
-      copyApplesSold: editApplesSold+editOldApplesSold,
+      copyApplesSold: editApplesSold + editOldApplesSold,
       copyPriceSold: editPriceSold,
-      copyCashReceived: editCashReceived+editOldCashReceived,
+      copyCashReceived: editCashReceived + editOldCashReceived,
     );
     await NotesDatabase.instance.update(note);
   }

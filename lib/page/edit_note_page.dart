@@ -16,11 +16,15 @@ class AddEditNotePage extends StatefulWidget {
 }
 
 class _AddEditNotePageState extends State<AddEditNotePage> {
+  bool isAutoDate = true;
+  bool isCustomDate = false;
+
+  DateTime? pickedDate;
 
   final _formKey = GlobalKey<FormState>();
   late int editLength;
   late int editWidth;
-  late int editTemp;
+  late double editTemp;
   late String editApples;
   late String editSpoiled;
   late String oldEditSpoiled;
@@ -42,20 +46,31 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
     editLength = widget.note?.length ?? 0;
     editWidth = widget.note?.width ?? 0;
     editTemp = widget.note?.temp ?? 0;
-    editApples = widget.note?.apples ==null ? '': '${widget.note?.apples}';
-    editSpoiled = widget.note?.spoiled ==null ? '0': '${widget.note?.spoiled}';
-    oldEditSpoiled = widget.note?.oldSpoiled ==null ? '0': '${widget.note?.oldSpoiled}';
-    editApplesPrice = widget.note?.applesPrice ==null ? '': '${widget.note?.applesPrice}';
+    editApples = widget.note?.apples == null ? '' : '${widget.note?.apples}';
+    editSpoiled =
+        widget.note?.spoiled == null ? '0' : '${widget.note?.spoiled}';
+    oldEditSpoiled =
+        widget.note?.oldSpoiled == null ? '0' : '${widget.note?.oldSpoiled}';
+    editApplesPrice =
+        widget.note?.applesPrice == null ? '' : '${widget.note?.applesPrice}';
     editFert = widget.note?.fert ?? 0;
     editOldFert = widget.note?.oldFert ?? 0;
     editFertPrice = widget.note?.fertPrice ?? 0;
     editOldFertPrice = widget.note?.oldFertPrice ?? 0;
     editApplesSold = widget.note?.applesSold ?? 0;
     editOldApplesSold = widget.note?.oldApplesSold ?? 0;
-    editPriceSold= widget.note?.priceSold ?? 0;
-    editCashReceived= widget.note?.cashReceived ?? 0;
-    editOldCashReceived= widget.note?.oldCashReceived ?? 0;
+    editPriceSold = widget.note?.priceSold ?? 0;
+    editCashReceived = widget.note?.cashReceived ?? 0;
+    editOldCashReceived = widget.note?.oldCashReceived ?? 0;
     editTitle = widget.note?.title ?? '';
+  }
+
+  Future<void> showDate() async {
+    this.pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2020),
+        lastDate: DateTime(2025));
   }
 
   @override
@@ -66,39 +81,80 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
         body: Form(
           key: _formKey,
           child: NoteFormWidget(
-            length:editLength,
-            width:editWidth,
-            temp:editTemp,
-            apples:editApples,
-            spoiled:editSpoiled,
-            applesPrice:editApplesPrice,
-            oldSpoiled:oldEditSpoiled,
-            fert:editFert,
-            oldFert:editOldFert,
-            fertPrice:editFertPrice,
-            oldFertPrice:editOldFertPrice,
-            applesSold:editApplesSold,
-            oldApplesSold:editOldApplesSold,
-            priceSold:editPriceSold,
-            cashReceived:editCashReceived,
-            oldCashReceived:editOldCashReceived,
+            length: editLength,
+            width: editWidth,
+            temp: editTemp,
+            apples: editApples,
+            spoiled: editSpoiled,
+            applesPrice: editApplesPrice,
+            oldSpoiled: oldEditSpoiled,
+            fert: editFert,
+            oldFert: editOldFert,
+            fertPrice: editFertPrice,
+            oldFertPrice: editOldFertPrice,
+            applesSold: editApplesSold,
+            oldApplesSold: editOldApplesSold,
+            priceSold: editPriceSold,
+            cashReceived: editCashReceived,
+            oldCashReceived: editOldCashReceived,
             title: editTitle,
-            onChangedLength: (length) => setState(() => this.editLength = length),
+            autoDate: isAutoDate,
+            customDate: isCustomDate,
+            onChangedAutoDate: (value) {
+              setState(() {
+                this.isAutoDate = value;
+                print(isAutoDate);
+                if (isAutoDate == true) {
+                  this.isCustomDate = false;
+                }
+            
+              });
+            },
+            onChangedCustomDate: (value) async {
+              if (isCustomDate = true) {
+                await showDate();
+              }
+              setState(() {
+                this.isCustomDate = value;
+                print(value);
+                if (isCustomDate == true) {
+                  this.isAutoDate = false;
+                }
+                if (isCustomDate == false) {
+                  this.isAutoDate = true;
+                }
+              });
+            },
+        
+            onChangedLength: (length) =>
+                setState(() => this.editLength = length),
             onChangedWidth: (width) => setState(() => this.editWidth = width),
             onChangedTemp: (temp) => setState(() => this.editTemp = temp),
-            onChangedApples: (apples) => setState(() => this.editApples = apples),
-            onChangedSpoiled: (spoiled) => setState(() => this.editSpoiled = spoiled),
-            onChangedApplesPrice: (applesPrice) => setState(() => this.editApplesPrice = applesPrice),
-            oldOnChangedSpoiled: (oldSpoiled) => setState(() => this.oldEditSpoiled = oldSpoiled),
+            onChangedApples: (apples) =>
+                setState(() => this.editApples = apples),
+            onChangedSpoiled: (spoiled) =>
+                setState(() => this.editSpoiled = spoiled),
+            onChangedApplesPrice: (applesPrice) =>
+                setState(() => this.editApplesPrice = applesPrice),
+            oldOnChangedSpoiled: (oldSpoiled) =>
+                setState(() => this.oldEditSpoiled = oldSpoiled),
             onChangedFert: (fert) => setState(() => this.editFert = fert),
-            oldOnChangedFert: (oldFert) => setState(() => this.editOldFert = oldFert),
-            onChangedFertPrice: (fertPrice) => setState(() => this.editFertPrice = fertPrice),
-            oldOnChangedFertPrice: (oldFertPrice) => setState(() => this.editOldFertPrice = oldFertPrice),
-            onChangedApplesSold: (applesSold) => setState(() => this.editApplesSold = applesSold),
-            oldOnChangedApplesSold: (oldApplesSold) => setState(() => this.editOldApplesSold = oldApplesSold),
-            onChangedPriceSold: (priceSold) => setState(() => this.editPriceSold = priceSold),
-            onChangedCashReceived: (cashReceived) => setState(() => this.editCashReceived = cashReceived),
-            oldOnChangedCashReceived: (oldCashReceived) => setState(() => this.editOldCashReceived = oldCashReceived),
+            oldOnChangedFert: (oldFert) =>
+                setState(() => this.editOldFert = oldFert),
+            onChangedFertPrice: (fertPrice) =>
+                setState(() => this.editFertPrice = fertPrice),
+            oldOnChangedFertPrice: (oldFertPrice) =>
+                setState(() => this.editOldFertPrice = oldFertPrice),
+            onChangedApplesSold: (applesSold) =>
+                setState(() => this.editApplesSold = applesSold),
+            oldOnChangedApplesSold: (oldApplesSold) =>
+                setState(() => this.editOldApplesSold = oldApplesSold),
+            onChangedPriceSold: (priceSold) =>
+                setState(() => this.editPriceSold = priceSold),
+            onChangedCashReceived: (cashReceived) =>
+                setState(() => this.editCashReceived = cashReceived),
+            oldOnChangedCashReceived: (oldCashReceived) =>
+                setState(() => this.editOldCashReceived = oldCashReceived),
             onChangedTitle: (title) => setState(() => this.editTitle = title),
           ),
         ),
@@ -107,7 +163,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
   Widget buildButton() {
     final isFormValid = editTitle.isNotEmpty;
 
-    // 
+    //
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       child: ElevatedButton(
@@ -137,14 +193,12 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
     }
   }
 
-
   Future updateNote() async {
-    final note = widget.note!.copy(
-
-    );
+    final note = widget.note!.copy();
 
     await NotesDatabase.instance.update(note);
   }
+
   Future addNote() async {
     final note = Note(
       length: editLength,
@@ -164,18 +218,11 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
       cashReceived: editCashReceived,
       oldCashReceived: editOldCashReceived,
       title: editTitle,
-      createdTime: DateTime.now(),
+      createdTime: pickedDate != null && isAutoDate == false
+          ? pickedDate!
+          : DateTime.now(),
     );
 
     await NotesDatabase.instance.create(note);
   }
 }
-
-
-
-
-
-
-
-
-

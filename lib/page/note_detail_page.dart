@@ -9,11 +9,13 @@ import 'package:sqflite_database_example/page/note_detail_page_tasks.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NoteDetailPage extends StatefulWidget {
+  final Note note;
   final int noteId;
 
   const NoteDetailPage({
     Key? key,
-    required this.noteId,
+    required this.note,
+    required this.noteId
   }) : super(key: key);
 
   @override
@@ -21,7 +23,7 @@ class NoteDetailPage extends StatefulWidget {
 }
 
 class _NoteDetailPageState extends State<NoteDetailPage> {
-  late Note note;
+ late Note note;
   bool isLoading = false;
 
   final double rowPadding = 4.0;
@@ -29,17 +31,18 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   final DateTime now = DateTime.now();
 
   //Variables to be displayed on view.
-  get boxesNeeded => (note.apples * 0.2).round();
-  get waterNeeded => (note.apples * 0.1).ceil();
-  get squareMeter => (note.length * note.width).round();
-  get remainingApples => (note.apples - note.spoiled - note.applesSold);
+  get boxesNeeded => (widget.note.apples * 0.2).round();
+  get waterNeeded => (widget.note.apples * 0.1).ceil();
+  get squareMeter => (widget.note.length * widget.note.width).round();
+  get remainingApples =>
+      (widget.note.apples - widget.note.spoiled - widget.note.applesSold);
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    refreshNote();
-  }
+  //   refreshNote();
+  // }
 
   Future refreshNote() async {
     setState(() => isLoading = true);
@@ -53,7 +56,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: Text(
-            note.title +
+            widget.note.title +
                 ',\nToday : ' +
                 DateFormat.yMMMd().format(DateTime.now()),
             style: TextStyle(
@@ -73,7 +76,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
                   children: [
                     Text(
                       'Date House was Added: \t ' +
-                          DateFormat.yMMMd().format(note.createdTime),
+                          DateFormat.yMMMd().format(widget.note.createdTime),
                       style: TextStyle(color: Colors.white38),
                     ),
                     SizedBox(height: 8),
@@ -254,7 +257,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               Expanded(
                 flex: 1,
                 child: Text(
-                  note.spoiled.toString() + ' rotten',
+                  widget.note.spoiled.toString() + ' rotten',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
@@ -285,7 +288,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
               Expanded(
                 flex: 1,
                 child: Text(
-                  note.applesSold.toString() + ' sold',
+                  widget.note.applesSold.toString() + ' sold',
                   style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
@@ -338,7 +341,7 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
             if (isLoading) return;
 
             await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => NoteDetailPageTasks(noteId: note.id!),
+              builder: (context) => NoteDetailPageTasks(noteId: widget.noteId , sameNote: widget.note,),
             ));
 
             refreshNote();

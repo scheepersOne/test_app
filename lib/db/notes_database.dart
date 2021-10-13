@@ -37,7 +37,7 @@ CREATE TABLE $tableNotes (
   ${NoteFields.idField} $idType, 
   ${NoteFields.lengthField} $integerType,
   ${NoteFields.widthField} $integerType,
-  ${NoteFields.tempField} $integerType,
+  ${NoteFields.tempField} $doubleType,
   ${NoteFields.applesField} $doubleType,
   ${NoteFields.spoiledField} $doubleType,
   ${NoteFields.oldSpoiledField} $doubleType,
@@ -89,7 +89,13 @@ CREATE TABLE $tableNotes (
 
     final orderBy = '${NoteFields.timeField} ASC';
 
-    final result = await db.query(tableNotes, orderBy: orderBy);
+    final result = await db.query(tableNotes,
+        orderBy: orderBy,
+        
+        
+        // where: '${NoteFields.timeField} >= ?' , whereArgs: [DateTime.now().toString()]
+         
+         );
 
     return result.map((json) => Note.fromJson(json)).toList();
   }

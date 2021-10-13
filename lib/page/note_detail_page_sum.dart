@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite_database_example/db/notes_database.dart';
 import 'package:sqflite_database_example/model/note.dart';
+
 class NoteDetailPageSum extends StatefulWidget {
   final int noteId;
+  final Note note;
 
   const NoteDetailPageSum({
     Key? key,
     required this.noteId,
+    required this.note
   }) : super(key: key);
 
   @override
@@ -15,7 +18,7 @@ class NoteDetailPageSum extends StatefulWidget {
 }
 
 class _NoteDetailPageSumState extends State<NoteDetailPageSum> {
-  late Note note;
+ // late Note note;
   bool isLoading = false;
 
   final double rowPadding = 4.0;
@@ -23,37 +26,38 @@ class _NoteDetailPageSumState extends State<NoteDetailPageSum> {
   final DateTime now = DateTime.now();
 
   //Variables to be displayed on view.
-  get remainingApples => (note.apples-note.spoiled);
+  get remainingApples => (widget.note.apples - widget.note.spoiled);
 
-  get applesBought => note.apples*note.applesPrice;
+  get applesBought => widget.note.apples * widget.note.applesPrice;
 
-  get fertBought => note.fertPrice;
+  get fertBought => widget.note.fertPrice;
 
-  get moneyIn => note.cashReceived;
+  get moneyIn => widget.note.cashReceived;
 
-  get profit => note.cashReceived-(applesBought+fertBought);
+  get profit => widget.note.cashReceived - (applesBought + fertBought);
 
+  // @override
+  // void initState() {
+  //   super.initState();
 
-  @override
-  void initState() {
-    super.initState();
+  //   refreshNote();
+  // }
 
-    refreshNote();
-  }
+  // Future refreshNote() async {
+  //   setState(() => isLoading = true);
 
-  Future refreshNote() async {
-    setState(() => isLoading = true);
+  //   this.note = await NotesDatabase.instance.readNote(widget.noteId);
 
-    this.note = await NotesDatabase.instance.readNote(widget.noteId);
-
-    setState(() => isLoading = false);
-  }
+  //   setState(() => isLoading = false);
+  // }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: Text(
-            note.title + ',\nToday : ' + DateFormat.yMMMd().format(DateTime.now()),
+            widget.note.title +
+                ',\nToday : ' +
+                DateFormat.yMMMd().format(DateTime.now()),
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -111,7 +115,6 @@ class _NoteDetailPageSumState extends State<NoteDetailPageSum> {
                       ),
                     ),
                     buildProfit(),
-
                   ],
                 ),
               ),
@@ -120,7 +123,7 @@ class _NoteDetailPageSumState extends State<NoteDetailPageSum> {
   Widget buildApplesBought() => buildHeader(
         header: 'Apples Bought Price : ',
         child: Text(
-          'R '+applesBought.toString(),
+          'R ' + applesBought.toString(),
           style: TextStyle(
             color: Colors.white,
             fontSize: 14,
@@ -129,51 +132,50 @@ class _NoteDetailPageSumState extends State<NoteDetailPageSum> {
       );
 
   Widget buildFertBought() => buildHeader(
-    header: 'Fertilizer Bought Price : ' ,
-    child: Text(
-      'R '+fertBought.toString(),
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 16,
-      ),
-    ),
-  );
+        header: 'Fertilizer Bought Price : ',
+        child: Text(
+          'R ' + fertBought.toString(),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+      );
 
   //Total Costs.
   Widget buildTotalCosts() => buildHeader(
-    header: 'TOTAL : ' ,
-    child: Text(
-      'R '+(applesBought+fertBought).toString(),
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 16,
-      ),
-    ),
-  );
+        header: 'TOTAL : ',
+        child: Text(
+          'R ' + (applesBought + fertBought).toString(),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+      );
 
   //Cash from apples.
   Widget buildMoneyIn() => buildHeader(
-    header: 'Money from selling Apples : ' ,
-    child: Text(
-      'R '+moneyIn.toString(),
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 16,
-      ),
-    ),
-  );
-
+        header: 'Money from selling Apples : ',
+        child: Text(
+          'R ' + moneyIn.toString(),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+      );
 
   Widget buildProfit() => buildHeader(
-    header: 'Money made/lost : ' ,
-    child: Text(
-      'R '+profit.toString(),
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 16,
-      ),
-    ),
-  );
+        header: 'Money made/lost : ',
+        child: Text(
+          'R ' + profit.toString(),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+        ),
+      );
 
   //BuildHeader.
   Widget buildHeader({
@@ -197,7 +199,9 @@ class _NoteDetailPageSumState extends State<NoteDetailPageSum> {
               children: [
                 Text(header,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.blueAccent, fontSize: 16)),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blueAccent,
+                        fontSize: 16)),
                 child,
               ],
             ),

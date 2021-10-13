@@ -5,7 +5,7 @@ class Note {
   final int? id;
   final String title;
   final DateTime createdTime;
-  final int temp;
+  final double temp;
   final int length;
   final int width;
   final double apples;
@@ -54,7 +54,7 @@ class Note {
     DateTime? copyCreatedTime,
     int? copyLength,
     int? copyWidth,
-    int? copyTemp,
+    double? copyTemp,
     double? copyApples,
     double? copySpoiled,
     double? oldCopySpoiled,
@@ -97,7 +97,7 @@ class Note {
         createdTime: DateTime.parse(json[NoteFields.timeField] as String),
         length: json[NoteFields.lengthField] as int,
         width: json[NoteFields.widthField] as int,
-        temp: json[NoteFields.tempField] as int,
+        temp: json[NoteFields.tempField] as double,
         apples: json[NoteFields.applesField] as double,
         spoiled: json[NoteFields.spoiledField] as double,
         applesPrice: json[NoteFields.applePriceField] as double,

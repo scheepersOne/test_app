@@ -11,11 +11,11 @@ class AddEditNotePageMortality extends StatefulWidget {
     this.note,
   }) : super(key: key);
   @override
-  _AddEditNotePageMortalityState createState() => _AddEditNotePageMortalityState();
+  _AddEditNotePageMortalityState createState() =>
+      _AddEditNotePageMortalityState();
 }
 
 class _AddEditNotePageMortalityState extends State<AddEditNotePageMortality> {
-
   final _formKey = GlobalKey<FormState>();
   late String editSpoiled;
   late String oldEditSpoiled;
@@ -27,7 +27,7 @@ class _AddEditNotePageMortalityState extends State<AddEditNotePageMortality> {
   @override
   void initState() {
     super.initState();
-    editSpoiled = widget.note?.spoiled ==null ? '': '${widget.note?.spoiled}';
+    editSpoiled = widget.note?.spoiled == null ? '' : '${widget.note?.spoiled}';
     oldEditSpoiled = '0';
     editFert = widget.note?.fert ?? 0;
     editOldFert = widget.note?.oldFertPrice ?? 0;
@@ -43,27 +43,27 @@ class _AddEditNotePageMortalityState extends State<AddEditNotePageMortality> {
         body: Form(
           key: _formKey,
           child: NoteFormWidgetMortality(
-            spoiled:editSpoiled,
-            oldSpoiled:oldEditSpoiled,
-            fert:editFert,
-            oldFert:editOldFert,
+            spoiled: editSpoiled,
+            oldSpoiled: oldEditSpoiled,
+            fert: editFert,
+            oldFert: editOldFert,
             fertPrice: editFertPrice,
             oldFertPrice: editOldFertPrice,
-
-            oldOnChangedSpoiled: (oldSpoiled) => setState(() => this.oldEditSpoiled = oldSpoiled),
-            oldOnChangedFert: (oldFert) => setState(() => this.editOldFert = oldFert),
-            oldOnChangedFertPrice: (oldFertPrice) => setState(() => this.editOldFertPrice = oldFertPrice),
+            oldOnChangedSpoiled: (oldSpoiled) =>
+                setState(() => this.oldEditSpoiled = oldSpoiled),
+            oldOnChangedFert: (oldFert) =>
+                setState(() => this.editOldFert = oldFert),
+            oldOnChangedFertPrice: (oldFertPrice) =>
+                setState(() => this.editOldFertPrice = oldFertPrice),
           ),
         ),
       );
 
   Widget buildButton() {
-
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-        ),
+        style: ElevatedButton.styleFrom(),
         onPressed: addOrUpdateNote,
         child: Text('Save'),
       ),
@@ -77,18 +77,19 @@ class _AddEditNotePageMortalityState extends State<AddEditNotePageMortality> {
 
       if (isUpdating) {
         await updateNote();
+        Navigator.of(context).pop();
       }
-      Navigator.of(context).pop();
+      //  
     }
   }
 
   Future updateNote() async {
     final note = widget.note!.copy(
-      copySpoiled: double.parse(editSpoiled+oldEditSpoiled),
-      copyFert: editFert+editOldFert,
-      copyFertPrice: editFertPrice+editOldFertPrice,
+      copySpoiled: double.parse(editSpoiled) + double.parse(oldEditSpoiled),
+      copyFert: editFert + editOldFert,
+      copyFertPrice: editFertPrice + editOldFertPrice,
     );
     await NotesDatabase.instance.update(note);
+  
   }
-
 }

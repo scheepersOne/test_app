@@ -65,8 +65,9 @@ class _NotesPageState extends State<NotesPage> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           backgroundColor: Colors.green.shade800,
-          label: const Text('Add New House',
-          style: TextStyle(fontSize: 18),
+          label: const Text(
+            'Add New House',
+            style: TextStyle(fontSize: 18),
           ),
           icon: const Icon(
             Icons.add,
@@ -94,9 +95,14 @@ class _NotesPageState extends State<NotesPage> {
 
           return GestureDetector(
             onTap: () async {
-              await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => NoteDetailPage(noteId: note.id!),
-              ));
+              await NotesDatabase.instance.readNote(note.id!).then((value) {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => NoteDetailPage(
+                    noteId: note.id!,
+                    note: value,
+                  ),
+                ));
+              });
 
               refreshNotes();
             },
