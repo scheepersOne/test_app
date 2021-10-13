@@ -138,6 +138,8 @@ class NoteFormWidget extends StatelessWidget {
         ),
       );
 
+
+
   //Build Title.
   Widget buildTitle() => TextFormField(
         maxLines: 1,
@@ -156,6 +158,17 @@ class NoteFormWidget extends StatelessWidget {
             title != null && title.isEmpty ? 'The title cannot be empty' : null,
         onChanged: onChangedTitle,
       );
+
+  //TODO: NB !!!!!! Add a check box which allows user to enter date manually.
+  //TODO:  If Checkbox is checked, the user should be able to add date time manually. Comments to follow.
+  /*
+  * The checkbox should be under the title widget and above the length widget.
+  * it should look something like this: [x] 'Enter date time manually?' .
+  * When user checks the box, widget containing date time picker should become visible, and
+  * the user should be able to pick the date and time.
+  * If the box is not checked, the dateTime.now() should be used instead.
+  * the date time.now() is currently being assigned to all house entries.
+  * */
 
   //Build Length Box.
   Widget buildLength() => buildHeader(
