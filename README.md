@@ -1,5 +1,5 @@
 # untitled3
-- The main problem we have is when we use the code that syomna provided 
+- The main problem we have is when we use the code provided 
   for the textFormField to get user input, and there is two of the same variables
   that needs to be added to each other (example: spoiled and spoiledOld), 
   We get an error where when we save the new information, it does not add the values...
