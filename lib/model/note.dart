@@ -26,7 +26,6 @@ class Note {
   final int cashReceived;
   final int oldCashReceived;
 
-
   const Note({
     this.id,
     required this.title,

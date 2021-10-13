@@ -8,7 +8,6 @@ import 'package:sqflite_database_example/page/edit_note_page_mortality.dart';
 import 'package:sqflite_database_example/page/note_detail_page_tasks.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-//TODO:  Apples remaining cannot be less than total Apples.
 class NoteDetailPage extends StatefulWidget {
   final int noteId;
 
