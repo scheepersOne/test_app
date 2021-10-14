@@ -17,19 +17,19 @@ class AddEditNotePageSell extends StatefulWidget {
 class _AddEditNotePageSellState extends State<AddEditNotePageSell> {
   final _formKey = GlobalKey<FormState>();
   late int editApplesSold;
-  late int editOldApplesSold;
-  late int editPriceSold;
+  late String editOldApplesSold;
+  late String editPriceSold;
   late int editCashReceived;
-  late int editOldCashReceived;
+  late String editOldCashReceived;
 
   @override
   void initState() {
     super.initState();
     editApplesSold = widget.note?.applesSold ?? 0;
-    editOldApplesSold = widget.note?.oldApplesSold ?? 0;
-    editPriceSold = widget.note?.priceSold ?? 0;
+    editOldApplesSold = widget.note?.oldApplesSold == null ? '' : '${widget.note?.oldApplesSold}';
+    editPriceSold = widget.note?.priceSold == null ? '' : '${widget.note?.priceSold}';
     editCashReceived = widget.note?.cashReceived ?? 0;
-    editOldCashReceived = widget.note?.oldCashReceived ?? 0;
+    editOldCashReceived = widget.note?.oldCashReceived == null ? '' : '${widget.note?.oldCashReceived}';
   }
 
   @override
@@ -81,9 +81,9 @@ class _AddEditNotePageSellState extends State<AddEditNotePageSell> {
 
   Future updateNote() async {
     final note = widget.note!.copy(
-      copyApplesSold: editApplesSold + editOldApplesSold,
-      copyPriceSold: editPriceSold,
-      copyCashReceived: editCashReceived + editOldCashReceived,
+      copyApplesSold: editApplesSold + int.parse(editOldApplesSold),
+      copyPriceSold: double.parse(editPriceSold),
+      copyCashReceived: editCashReceived + int.parse(editOldCashReceived),
     );
     await NotesDatabase.instance.update(note);
   }

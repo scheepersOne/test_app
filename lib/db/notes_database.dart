@@ -1,5 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_database_example/model/days.dart';
 import 'package:sqflite_database_example/model/note.dart';
 
 class NotesDatabase {
@@ -44,15 +45,24 @@ CREATE TABLE $tableNotes (
   ${NoteFields.applePriceField} $doubleType,
   ${NoteFields.fertField} $integerType,
   ${NoteFields.oldFertField} $integerType,
-  ${NoteFields.fertPriceField} $integerType,
-  ${NoteFields.oldFertPriceField} $integerType,
+  ${NoteFields.fertPriceField} $doubleType,
+  ${NoteFields.oldFertPriceField} $doubleType,
   ${NoteFields.applesSoldField} $integerType,
   ${NoteFields.oldApplesSoldField} $integerType,
-  ${NoteFields.priceSoldField} $integerType,
+  ${NoteFields.priceSoldField} $doubleType,
   ${NoteFields.cashReceivedField} $integerType,
-  ${NoteFields.oldCashReceivedField} $integerType,
+  ${NoteFields.oldCashReceivedField} $doubleType,
   ${NoteFields.titleField} $textType,
   ${NoteFields.timeField} $textType
+  )
+''');
+
+    await db.execute('''
+CREATE TABLE $tableDays ( 
+  ${DaysFields.idField} $idType, 
+  ${DaysFields.noteIdField} $integerType,
+  ${DaysFields.timeField} $textType,
+  ${DaysFields.tempField} $doubleType
   )
 ''');
   }
@@ -63,6 +73,14 @@ CREATE TABLE $tableNotes (
 
     final id = await db.insert(tableNotes, note.toJson());
     return note.copy(copyId: id);
+  }
+
+  // Insert Days.
+
+    Future<Days> insertDays(Days days) async {
+    final db = await instance.database;
+    final id = await db.insert(tableDays, days.toJson());
+    return days.copy(copyId: id);
   }
 
   //Read Note.
@@ -91,13 +109,23 @@ CREATE TABLE $tableNotes (
 
     final result = await db.query(tableNotes,
         orderBy: orderBy,
-        
-        
-        // where: '${NoteFields.timeField} >= ?' , whereArgs: [DateTime.now().toString()]
          
          );
 
     return result.map((json) => Note.fromJson(json)).toList();
+  }
+
+    Future<List<Days>> readAllDays() async {
+    final db = await instance.database;
+
+    final orderBy = '${DaysFields.timeField} ASC';
+
+    final result = await db.query(
+      tableDays,
+      orderBy: orderBy,
+    );
+
+    return result.map((json) => Days.fromJson(json)).toList();
   }
 
   //Update Note.

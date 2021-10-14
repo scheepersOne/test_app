@@ -95,13 +95,18 @@ class _NotesPageState extends State<NotesPage> {
 
           return GestureDetector(
             onTap: () async {
-              await NotesDatabase.instance.readNote(note.id!).then((value) {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => NoteDetailPage(
-                    noteId: note.id!,
-                    note: value,
-                  ),
-                ));
+              await NotesDatabase.instance
+                  .readNote(note.id!)
+                  .then((singleNote) async {
+                await NotesDatabase.instance.readAllDays().then((days){
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => NoteDetailPage(
+                      noteId: note.id!,
+                      note: singleNote,
+                      days: days
+                    ),
+                  ));
+                });
               });
 
               refreshNotes();

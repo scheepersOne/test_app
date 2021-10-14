@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite_database_example/db/notes_database.dart';
+import 'package:sqflite_database_example/model/days.dart';
 import 'package:sqflite_database_example/model/note.dart';
 import 'package:sqflite_database_example/page/edit_note_page.dart';
 import 'package:sqflite_database_example/page/edit_note_page_mortality.dart';
@@ -11,19 +12,18 @@ import 'package:url_launcher/url_launcher.dart';
 class NoteDetailPage extends StatefulWidget {
   final Note note;
   final int noteId;
+  final List<Days> days;
 
-  const NoteDetailPage({
-    Key? key,
-    required this.note,
-    required this.noteId
-  }) : super(key: key);
+  const NoteDetailPage(
+      {Key? key, required this.note, required this.noteId, required this.days})
+      : super(key: key);
 
   @override
   _NoteDetailPageState createState() => _NoteDetailPageState();
 }
 
 class _NoteDetailPageState extends State<NoteDetailPage> {
- late Note note;
+  late Note note;
   bool isLoading = false;
 
   final double rowPadding = 4.0;
@@ -339,9 +339,9 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
           ),
           onPressed: () async {
             if (isLoading) return;
-
-            await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => NoteDetailPageTasks(noteId: widget.noteId , sameNote: widget.note,),
+           Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => NoteDetailPageTasks(
+                  noteId: widget.noteId, sameNote: widget.note, days: widget.days),
             ));
 
             refreshNote();

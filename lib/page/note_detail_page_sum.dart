@@ -18,7 +18,7 @@ class NoteDetailPageSum extends StatefulWidget {
 }
 
 class _NoteDetailPageSumState extends State<NoteDetailPageSum> {
- // late Note note;
+  //late Note note;
   bool isLoading = false;
 
   final double rowPadding = 4.0;

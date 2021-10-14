@@ -12,8 +12,8 @@ class Note {
   final double applesPrice;
   final int fert;
   final int oldFert;
-  final int fertPrice;
-  final int oldFertPrice;
+  final double fertPrice;
+  final double oldFertPrice;
 
   //Mortality Form
   final double spoiled;
@@ -22,9 +22,9 @@ class Note {
   //Sell Form
   final int applesSold;
   final int oldApplesSold;
-  final int priceSold;
+  final double priceSold;
   final int cashReceived;
-  final int oldCashReceived;
+  final double oldCashReceived;
 
   const Note({
     this.id,
@@ -61,13 +61,13 @@ class Note {
     double? copyApplesPrice,
     int? copyFert,
     int? copyOldFert,
-    int? copyFertPrice,
-    int? copyOldFertPrice,
+    double? copyFertPrice,
+    double? copyOldFertPrice,
     int? copyApplesSold,
     int? copyOldApplesSold,
-    int? copyPriceSold,
+    double? copyPriceSold,
     int? copyCashReceived,
-    int? copyOldCashReceived,
+    double? copyOldCashReceived,
   }) =>
       Note(
         id: copyId ?? this.id,
@@ -104,13 +104,13 @@ class Note {
         oldSpoiled: json[NoteFields.oldSpoiledField] as double,
         fert: json[NoteFields.fertField] as int,
         oldFert: json[NoteFields.oldFertField] as int,
-        fertPrice: json[NoteFields.fertPriceField] as int,
-        oldFertPrice: json[NoteFields.oldFertPriceField] as int,
+        fertPrice: json[NoteFields.fertPriceField] as double,
+        oldFertPrice: json[NoteFields.oldFertPriceField] as double,
         applesSold: json[NoteFields.applesSoldField] as int,
         oldApplesSold: json[NoteFields.oldApplesSoldField] as int,
-        priceSold: json[NoteFields.priceSoldField] as int,
+        priceSold: json[NoteFields.priceSoldField] as double,
         cashReceived: json[NoteFields.cashReceivedField] as int,
-        oldCashReceived: json[NoteFields.oldCashReceivedField] as int,
+        oldCashReceived: json[NoteFields.oldCashReceivedField] as double,
       );
 
   Map<String, Object?> toJson() => {
@@ -159,6 +159,8 @@ class NoteFields {
     cashReceivedField,
     oldCashReceivedField,
   ];
+
+  
 
   static final String idField = '_id';
   static final String titleField = 'title';

@@ -4,66 +4,66 @@ import 'package:flutter/services.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class NoteFormWidget extends StatelessWidget {
-  final int? length;
-  final int? width;
-  final double? temp;
+  final String? length;
+  final String? width;
+  final String? temp;
   final String? apples;
   final String? spoiled;
   final String? oldSpoiled;
   final String? applesPrice;
-  final int? fert;
-  final int? oldFert;
-  final int? fertPrice;
-  final int? oldFertPrice;
+  final String? fertPrice;
+  final String? priceSold;
+  final String? fert;
+  final String? oldFert;
+
+  final String? oldFertPrice;
   final int? applesSold;
   final int? oldApplesSold;
-  final int? priceSold;
+
   final int? cashReceived;
-  final int? oldCashReceived;
+  final String? oldCashReceived;
   final String? title;
-  final bool? autoDate;
   final bool? customDate;
 
-  final ValueChanged<int> onChangedLength;
-  final ValueChanged<int> onChangedWidth;
-  final ValueChanged<double> onChangedTemp;
+  final ValueChanged<String> onChangedLength;
+  final ValueChanged<String> onChangedWidth;
+  final ValueChanged<String> onChangedTemp;
   final ValueChanged<String> onChangedApples;
   final ValueChanged<String> onChangedSpoiled;
   final ValueChanged<String> oldOnChangedSpoiled;
   final ValueChanged<String> onChangedApplesPrice;
-  final ValueChanged<int> onChangedFert;
-  final ValueChanged<int> oldOnChangedFert;
-  final ValueChanged<int> onChangedFertPrice;
-  final ValueChanged<int> oldOnChangedFertPrice;
+  final ValueChanged<String> onChangedFertPrice;
+  final ValueChanged<String> onChangedFert;
+  final ValueChanged<String> oldOnChangedFert;
+
+  final ValueChanged<String> oldOnChangedFertPrice;
   final ValueChanged<int> onChangedApplesSold;
   final ValueChanged<int> oldOnChangedApplesSold;
-  final ValueChanged<int> onChangedPriceSold;
+  final ValueChanged<String> onChangedPriceSold;
   final ValueChanged<int> onChangedCashReceived;
-  final ValueChanged<int> oldOnChangedCashReceived;
+  final ValueChanged<String> oldOnChangedCashReceived;
   final ValueChanged<String> onChangedTitle;
-  final ValueChanged<bool> onChangedAutoDate;
   final ValueChanged<bool> onChangedCustomDate;
 
   const NoteFormWidget({
     Key? key,
-    this.length = 0,
-    this.width = 0,
-    this.temp = 0,
+    this.length = '',
+    this.width = '',
+    this.temp = '',
     this.apples = '',
     this.spoiled = '',
     this.oldSpoiled = '',
     this.applesPrice = '',
-    this.fert = 0,
-    this.oldFert = 0,
-    this.fertPrice = 0,
-    this.oldFertPrice = 0,
+    this.fert = '',
+    this.oldFert = '',
+    this.fertPrice = '',
+    this.oldFertPrice = '',
     this.applesSold = 0,
     this.oldApplesSold = 0,
-    this.priceSold = 0,
+    this.priceSold = '',
     this.cashReceived = 0,
-    this.oldCashReceived = 0,
+    this.oldCashReceived = '',
     this.title = '',
-    this.autoDate = true,
     this.customDate = false,
     required this.onChangedLength,
     required this.onChangedWidth,
@@ -82,13 +82,12 @@ class NoteFormWidget extends StatelessWidget {
     required this.onChangedCashReceived,
     required this.oldOnChangedCashReceived,
     required this.onChangedTitle,
-    required this.onChangedAutoDate,
     required this.onChangedCustomDate,
   }) : super(key: key);
 
-  int? get userLength => length;
+  int? get userLength => length!.isNotEmpty ?  int.parse(length!) : 0;
 
-  int? get userWidth => width;
+  int? get userWidth => width!.isNotEmpty ?  int.parse(width!) : 0;
 
   int? get applesGet => ((userLength! * userWidth!) * 10);
 
@@ -100,6 +99,7 @@ class NoteFormWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               buildTitle(),
+              buildDate(context),
               buildLength(),
               buildWidth(),
               buildApples(),
@@ -107,49 +107,10 @@ class NoteFormWidget extends StatelessWidget {
               buildFert(),
               buildFertPrice(),
               buildTemp(),
-              buildDate(context)
             ],
           ),
         ),
       );
-
-// Build dateTime
-
-  Widget buildDate(context) {
-    return buildHeader(
-        header: 'Date',
-        child: Container(
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              unselectedWidgetColor: Colors.white,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: CheckboxListTile(
-                      value: autoDate,
-                      title: Text(
-                        'Auto Date',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      onChanged: (value) => onChangedAutoDate(value!)),
-                ),
-                Expanded(
-                  child: CheckboxListTile(
-                      title: Text(
-                        'Custom date',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      value: customDate,
-                      onChanged: (value) => onChangedCustomDate(value!)),
-                ),
-              ],
-            ),
-          ),
-        ));
-  }
 
   //Build Header.
   Widget buildHeader({
@@ -215,57 +176,67 @@ class NoteFormWidget extends StatelessWidget {
   * the date time.now() is currently being assigned to all house entries.
   * */
 
+// Build Date
+
+  Widget buildDate(context) {
+    return buildHeader(
+        header: 'Date',
+        child: Container(
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              unselectedWidgetColor: Colors.white,
+            ),
+            child: CheckboxListTile(
+                title: Text(
+                  'Enter date time manually?',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                controlAffinity: ListTileControlAffinity.leading,
+                value: customDate,
+                onChanged: (value) => onChangedCustomDate(value!)),
+          ),
+        ));
+  }
+
   //Build Length Box.
   Widget buildLength() => buildHeader(
         header: 'House Length: ',
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Text(
-                length.toString(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            Expanded(
-              flex: 9,
-              child: Slider(
-                label: length.toString(),
-                value: (length ?? 0).toDouble(),
-                min: 0,
-                max: 100,
-                divisions: 100,
-                onChanged: (length) => onChangedLength(length.toInt()),
-              ),
-            ),
-          ],
+        child: TextFormField(
+          maxLines: 1,
+          initialValue: length,
+          style: TextStyle(color: Colors.white60, fontSize: 18),
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: '        (Length)',
+            hintStyle: TextStyle(color: Colors.white24),
+          ),
+          validator: (value) => value != null && value.isEmpty
+              ? 'The Length cannot be empty'
+              : null,
+          onChanged: onChangedLength,
         ),
       );
 
   //Build Width.
   Widget buildWidth() => buildHeader(
         header: 'House Width: ',
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Text(
-                width.toString(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            Expanded(
-              flex: 9,
-              child: Slider(
-                label: width.toString(),
-                value: (width ?? 0).toDouble(),
-                min: 0,
-                max: 50,
-                divisions: 50,
-                onChanged: (width) => onChangedWidth(width.toInt()),
-              ),
-            ),
-          ],
+        child: TextFormField(
+          maxLines: 1,
+          initialValue: width,
+          style: TextStyle(color: Colors.white60, fontSize: 18),
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: '        (Width)',
+            hintStyle: TextStyle(color: Colors.white24),
+          ),
+          validator: (value) => value != null && value.isEmpty
+              ? 'The Width cannot be empty'
+              : null,
+          onChanged: onChangedWidth,
         ),
       );
 
@@ -370,102 +341,120 @@ class NoteFormWidget extends StatelessWidget {
   //Build Temp.
   Widget buildTemp() => buildHeader(
         header: 'House Temperature: ',
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Text(
-                temp.toString(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            Expanded(
-              flex: 9,
-              child: Slider(
-                label: temp.toString(),
-                value: (temp ?? 0),
-                min: 0.0,
-                max: 40.0,
-                divisions: 80,
-                onChanged: (temp) => onChangedTemp(temp),
-              ),
-            ),
+        child: TextFormField(
+          maxLines: 1,
+          initialValue: temp,
+          style: TextStyle(color: Colors.white60, fontSize: 18),
+          keyboardType:
+              TextInputType.numberWithOptions(decimal: true, signed: false),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d*)'))
           ],
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: '        (number of apples)',
+            hintStyle: TextStyle(color: Colors.white24),
+          ),
+          validator: (value) => value != null && value.isEmpty
+              ? 'The temp cannot be empty'
+              : null,
+          onChanged: onChangedTemp,
         ),
       );
 
   Widget buildFert() => buildHeader(
         header: 'Fertilizer Bought (kg): ',
-        child: Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Text(
-                fert.toString(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            Expanded(
-              flex: 9,
-              child: Slider(
-                label: fert.toString(),
-                value: (fert ?? 0).toDouble(),
-                min: 0,
-                max: 50,
-                divisions: 50,
-                onChanged: (feed) => onChangedFert(feed.toInt()),
-              ),
-            ),
+        child: TextFormField(
+          maxLines: 1,
+          initialValue: fert,
+          style: TextStyle(color: Colors.white60, fontSize: 18),
+          keyboardType:
+              TextInputType.number,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly
           ],
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: '        (Fert)',
+            hintStyle: TextStyle(color: Colors.white24),
+          ),
+          validator: (value) => value != null && value.isEmpty
+              ? 'The Fert cannot be empty'
+              : null,
+          onChanged: onChangedFert,
         ),
       );
 
   //TODO:  Fertilizer Price should also be input from the user through textFormField of type double, but it gets used again on note_form_widget_mortality.  so it needs to update.
-  Widget buildFertPrice() => Padding(
-        padding: EdgeInsets.all(2),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.white12,
-            ),
-            borderRadius: BorderRadius.circular(8),
+
+  Widget buildFertPrice() {
+    return buildHeader(
+        header: 'Price paid for fertilizer:',
+        child: TextFormField(
+          maxLines: 1,
+          initialValue: fertPrice,
+          style: TextStyle(color: Colors.white60, fontSize: 18),
+          keyboardType:
+              TextInputType.numberWithOptions(decimal: true, signed: false),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'(^\d*\.?\d*)'))
+          ],
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: '        (Fert price)',
+            hintStyle: TextStyle(color: Colors.white24),
           ),
-          padding: EdgeInsets.symmetric(vertical: 2),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        style: TextStyle(color: Colors.white),
-                        text: 'Price paid for fertilizer:',
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 10,
-                      child: NumberPicker(
-                        textStyle: TextStyle(color: Colors.white),
-                        axis: Axis.horizontal,
-                        step: 50,
-                        value: (fertPrice ?? 0),
-                        minValue: 0,
-                        maxValue: 40000,
-                        onChanged: (feedPrice) =>
-                            onChangedFertPrice(feedPrice.toInt()),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
+          validator: (value) => value != null && value.isEmpty
+              ? 'The Price cannot be empty'
+              : null,
+          onChanged: onChangedFertPrice,
+        ));
+  }
+  // Widget buildFertPrice() => Padding(
+  //       padding: EdgeInsets.all(2),
+  //       child: Container(
+  //         decoration: BoxDecoration(
+  //           border: Border.all(
+  //             color: Colors.white12,
+  //           ),
+  //           borderRadius: BorderRadius.circular(8),
+  //         ),
+  //         padding: EdgeInsets.symmetric(vertical: 2),
+  //         child: Padding(
+  //           padding: const EdgeInsets.only(left: 8, right: 8),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               RichText(
+  //                 text: TextSpan(
+  //                   children: [
+  //                     TextSpan(
+  //                       style: TextStyle(color: Colors.white),
+  //                       text: 'Price paid for fertilizer:',
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //               Row(
+  //                 children: [
+  //                   Expanded(
+  //                     flex: 10,
+  //                     child: NumberPicker(
+  //                       textStyle: TextStyle(color: Colors.white),
+  //                       axis: Axis.horizontal,
+  //                       step: 50,
+  //                       value: (fertPrice ?? 0),
+  //                       minValue: 0,
+  //                       maxValue: 40000,
+  //                       onChanged: (feedPrice) =>
+  //                           onChangedFertPrice(feedPrice.toInt()),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     );
 }

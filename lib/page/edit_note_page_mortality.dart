@@ -20,9 +20,9 @@ class _AddEditNotePageMortalityState extends State<AddEditNotePageMortality> {
   late String editSpoiled;
   late String oldEditSpoiled;
   late int editFert;
-  late int editOldFert;
-  late int editFertPrice;
-  late int editOldFertPrice;
+  late String editOldFert;
+  late double editFertPrice;
+  late String editOldFertPrice;
 
   @override
   void initState() {
@@ -30,9 +30,12 @@ class _AddEditNotePageMortalityState extends State<AddEditNotePageMortality> {
     editSpoiled = widget.note?.spoiled == null ? '' : '${widget.note?.spoiled}';
     oldEditSpoiled = '0';
     editFert = widget.note?.fert ?? 0;
-    editOldFert = widget.note?.oldFertPrice ?? 0;
+    editOldFert = widget.note?.oldFertPrice == null
+        ? '0.0'
+        : '${widget.note?.oldFertPrice}';
     editFertPrice = widget.note?.fertPrice ?? 0;
-    editOldFertPrice = widget.note?.oldFertPrice ?? 0;
+    editOldFertPrice =
+        widget.note?.oldFertPrice == null ? '0.0' : '${widget.note?.oldFertPrice}';
   }
 
   @override
@@ -79,17 +82,16 @@ class _AddEditNotePageMortalityState extends State<AddEditNotePageMortality> {
         await updateNote();
         Navigator.of(context).pop();
       }
-      //  
+      //
     }
   }
 
   Future updateNote() async {
     final note = widget.note!.copy(
       copySpoiled: double.parse(editSpoiled) + double.parse(oldEditSpoiled),
-      copyFert: editFert + editOldFert,
-      copyFertPrice: editFertPrice + editOldFertPrice,
+      copyFert: editFert + int.parse(editOldFert),
+      copyFertPrice: editFertPrice + double.parse(editOldFertPrice),
     );
     await NotesDatabase.instance.update(note);
-  
   }
 }

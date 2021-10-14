@@ -16,36 +16,37 @@ class AddEditNotePage extends StatefulWidget {
 }
 
 class _AddEditNotePageState extends State<AddEditNotePage> {
-  bool isAutoDate = true;
   bool isCustomDate = false;
 
   DateTime? pickedDate;
 
   final _formKey = GlobalKey<FormState>();
-  late int editLength;
-  late int editWidth;
-  late double editTemp;
+  late String editLength;
+  late String editWidth;
+  late String editTemp;
   late String editApples;
   late String editSpoiled;
   late String oldEditSpoiled;
   late String editApplesPrice;
-  late int editFert;
-  late int editOldFert;
-  late int editFertPrice;
-  late int editOldFertPrice;
+  late String editFertPrice;
+  late String editPriceSold;
+  late String editFert;
+  late String editOldFert;
+
+  late String editOldFertPrice;
   late int editApplesSold;
   late int editOldApplesSold;
-  late int editPriceSold;
+
   late int editCashReceived;
-  late int editOldCashReceived;
+  late String editOldCashReceived;
   late String editTitle;
 
   @override
   void initState() {
     super.initState();
-    editLength = widget.note?.length ?? 0;
-    editWidth = widget.note?.width ?? 0;
-    editTemp = widget.note?.temp ?? 0;
+    editLength = widget.note?.length == null ? '0' : '${widget.note?.length}';
+    editWidth = widget.note?.width == null ? '0' : '${widget.note?.width}';
+    editTemp = widget.note?.temp == null ? '0.0' : '${widget.note?.temp}';
     editApples = widget.note?.apples == null ? '' : '${widget.note?.apples}';
     editSpoiled =
         widget.note?.spoiled == null ? '0' : '${widget.note?.spoiled}';
@@ -53,15 +54,22 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
         widget.note?.oldSpoiled == null ? '0' : '${widget.note?.oldSpoiled}';
     editApplesPrice =
         widget.note?.applesPrice == null ? '' : '${widget.note?.applesPrice}';
-    editFert = widget.note?.fert ?? 0;
-    editOldFert = widget.note?.oldFert ?? 0;
-    editFertPrice = widget.note?.fertPrice ?? 0;
-    editOldFertPrice = widget.note?.oldFertPrice ?? 0;
+    editFert = widget.note?.fert == null ?  '0' : '${widget.note?.fert}';
+    editOldFert =
+        widget.note?.oldFert == null ? '0' : '${widget.note?.oldFert}';
+    editFertPrice =
+        widget.note?.fertPrice == null ? '' : '${widget.note?.fertPrice}';
+    editOldFertPrice = widget.note?.oldFertPrice == null
+        ? '0.0'
+        : '${widget.note?.oldFertPrice}';
     editApplesSold = widget.note?.applesSold ?? 0;
     editOldApplesSold = widget.note?.oldApplesSold ?? 0;
-    editPriceSold = widget.note?.priceSold ?? 0;
+    editPriceSold =
+        widget.note?.priceSold == null ? '0.0' : '${widget.note?.priceSold}';
     editCashReceived = widget.note?.cashReceived ?? 0;
-    editOldCashReceived = widget.note?.oldCashReceived ?? 0;
+    editOldCashReceived = widget.note?.oldCashReceived == null
+        ? '0.0'
+        : '${widget.note?.oldCashReceived}';
     editTitle = widget.note?.title ?? '';
   }
 
@@ -98,18 +106,7 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
             cashReceived: editCashReceived,
             oldCashReceived: editOldCashReceived,
             title: editTitle,
-            autoDate: isAutoDate,
             customDate: isCustomDate,
-            onChangedAutoDate: (value) {
-              setState(() {
-                this.isAutoDate = value;
-                print(isAutoDate);
-                if (isAutoDate == true) {
-                  this.isCustomDate = false;
-                }
-            
-              });
-            },
             onChangedCustomDate: (value) async {
               if (isCustomDate = true) {
                 await showDate();
@@ -117,15 +114,8 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
               setState(() {
                 this.isCustomDate = value;
                 print(value);
-                if (isCustomDate == true) {
-                  this.isAutoDate = false;
-                }
-                if (isCustomDate == false) {
-                  this.isAutoDate = true;
-                }
               });
             },
-        
             onChangedLength: (length) =>
                 setState(() => this.editLength = length),
             onChangedWidth: (width) => setState(() => this.editWidth = width),
@@ -201,24 +191,24 @@ class _AddEditNotePageState extends State<AddEditNotePage> {
 
   Future addNote() async {
     final note = Note(
-      length: editLength,
-      width: editWidth,
-      temp: editTemp,
+      length: int.parse(editLength),
+      width: int.parse(editWidth),
+      temp: double.parse(editTemp),
       apples: double.parse(editApples),
       spoiled: double.parse(editSpoiled),
       oldSpoiled: double.parse(oldEditSpoiled),
       applesPrice: double.parse(editApplesPrice),
-      fert: editFert,
-      oldFert: editOldFert,
-      fertPrice: editFertPrice,
-      oldFertPrice: editOldFertPrice,
+      fert: int.parse(editFert),
+      oldFert: int.parse(editOldFert),
+      fertPrice: double.parse(editFertPrice),
+      oldFertPrice: double.parse(editOldFertPrice),
       applesSold: editApplesSold,
       oldApplesSold: editOldApplesSold,
-      priceSold: editPriceSold,
+      priceSold: double.parse(editPriceSold),
       cashReceived: editCashReceived,
-      oldCashReceived: editOldCashReceived,
+      oldCashReceived: double.parse(editOldCashReceived),
       title: editTitle,
-      createdTime: pickedDate != null && isAutoDate == false
+      createdTime: pickedDate != null && isCustomDate == true
           ? pickedDate!
           : DateTime.now(),
     );
